@@ -355,3 +355,33 @@
             background-color: #8b0000;
             color: white;
         }
+
+
+        .links{
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .links a{
+            text-decoration: none;
+            color: #e9ecef;
+            font-weight: bold;
+        }
+
+        .links #estilizado{
+            text-decoration: none;
+            color: #e9ecef;
+            font-weight: bold;
+            background-color: #b30000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .links #estilizado:hover{
+            background-color: #d10000;
+        }
