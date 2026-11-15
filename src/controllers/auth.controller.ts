@@ -3,10 +3,10 @@ import { AppError, LoginUserDTO, RegisterUserDTO } from '../models/types';
 import { authService } from '../services/auth.service';
 
 export class AuthController {
-  public register(req: Request, res: Response): void {
+  public async register(req: Request, res: Response): Promise<void> {
     try {
       const dto = req.body as RegisterUserDTO;
-      const user = authService.register(dto);
+      const user = await authService.register(dto);
       res.status(201).json({
         message: 'Usuario registrado exitosamente',
         user
@@ -20,10 +20,10 @@ export class AuthController {
     }
   }
 
-  public login(req: Request, res: Response): void {
+  public async login(req: Request, res: Response): Promise<void> {
     try {
       const dto = req.body as LoginUserDTO;
-      const result = authService.login(dto);
+      const result = await authService.login(dto);
       res.status(200).json({
         message: 'Inicio de sesión exitoso',
         ...result

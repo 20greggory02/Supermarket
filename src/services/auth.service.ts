@@ -2,11 +2,14 @@ import { AppError, LoginUserDTO, RegisterUserDTO } from '../models/types';
 import { userRepository } from '../repositories/user.repository';
 
 export class AuthService {
-  public register(dto: RegisterUserDTO) {
-    const { name, email, password, confirmPassword } = dto;
+  public async register(dto: RegisterUserDTO) {
+    const { name, email, password, confirmPassword, phone, address } = dto;
 
-    if (!name || !email || !password || !confirmPassword) {
-      throw new AppError('Todos los campos son obligatorios', 400);
+    if (!name || !email || !password || !confirmPassword || !phone || !address) {
+      throw new AppError(
+        'Todos los campos son obligatorios (nombre, correo, contraseña, teléfono y dirección)',
+        400
+      );
     }
 
     if (!email.includes('@')) {
@@ -21,34 +24,37 @@ export class AuthService {
       throw new AppError('Las contraseñas no coinciden', 400);
     }
 
-    const existingUser = userRepository.findByEmail(email.trim());
+    const existingUser = await userRepository.findByEmail(email.trim());
     if (existingUser) {
       throw new AppError('Este correo ya se encuentra registrado', 400);
     }
 
-    const createdUser = userRepository.create({
+    const createdUser = await userRepository.create({
       name: name.trim(),
       email: email.trim().toLowerCase(),
-      password
+      password,
+      phone: phone.trim(),
+      address: address.trim()
     });
 
-    // Retornamos sin la contraseña por seguridad
     return {
       id: createdUser.id,
       name: createdUser.name,
       email: createdUser.email,
+      phone: createdUser.phone,
+      address: createdUser.address,
       createdAt: createdUser.createdAt
     };
   }
 
-  public login(dto: LoginUserDTO) {
+  public async login(dto: LoginUserDTO) {
     const { email, password } = dto;
 
     if (!email || !password) {
       throw new AppError('Debes ingresar correo y contraseña', 400);
     }
 
-    const user = userRepository.findByEmail(email.trim());
+    const user = await userRepository.findByEmail(email.trim());
     if (!user || user.password !== password) {
       throw new AppError('Correo o contraseña incorrectos', 401);
     }
@@ -60,7 +66,9 @@ export class AuthService {
       user: {
         id: user.id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        phone: user.phone,
+        address: user.address
       }
     };
   }

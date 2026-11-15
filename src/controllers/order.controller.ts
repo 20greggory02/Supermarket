@@ -3,10 +3,10 @@ import { AppError, CreateOrderDTO } from '../models/types';
 import { orderService } from '../services/order.service';
 
 export class OrderController {
-  public create(req: Request, res: Response): void {
+  public async create(req: Request, res: Response): Promise<void> {
     try {
       const dto = req.body as CreateOrderDTO;
-      const order = orderService.createOrder(dto);
+      const order = await orderService.createOrder(dto);
       res.status(201).json({
         message: '¡Pedido confirmado! Enviado a bodega para su preparación.',
         order

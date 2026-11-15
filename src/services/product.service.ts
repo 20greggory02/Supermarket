@@ -2,27 +2,16 @@ import { AppError, Category, CreateProductDTO, Product } from '../models/types';
 import { productRepository } from '../repositories/product.repository';
 
 export class ProductService {
-  public getProducts(category?: string, search?: string): Product[] {
-    let list = productRepository.findAll();
-
-    if (category && category.trim() !== '' && category !== 'Todos') {
-      list = list.filter((p) => p.category.toLowerCase() === category.toLowerCase());
-    }
-
-    if (search && search.trim() !== '') {
-      const term = search.toLowerCase();
-      list = list.filter((p) => p.name.toLowerCase().includes(term));
-    }
-
-    return list;
+  public async getProducts(category?: string, search?: string): Promise<Product[]> {
+    return await productRepository.findAll(category, search);
   }
 
-  public getProductById(id: number): Product {
+  public async getProductById(id: number): Promise<Product> {
     if (isNaN(id)) {
       throw new AppError('El ID del producto debe ser un número válido', 400);
     }
 
-    const product = productRepository.findById(id);
+    const product = await productRepository.findById(id);
     if (!product) {
       throw new AppError(`Producto con ID ${id} no encontrado`, 404);
     }
@@ -30,7 +19,7 @@ export class ProductService {
     return product;
   }
 
-  public createProduct(dto: CreateProductDTO): Product {
+  public async createProduct(dto: CreateProductDTO): Promise<Product> {
     const validCategories: Category[] = ['Abarrotes', 'Lácteos', 'Bebidas', 'Combos'];
 
     if (!dto.name || typeof dto.name !== 'string' || dto.name.trim().length < 2) {
@@ -52,8 +41,9 @@ export class ProductService {
       throw new AppError('El stock debe ser un número mayor o igual a 0', 400);
     }
 
-    return productRepository.create({
+    return await productRepository.create({
       name: dto.name.trim(),
+      description: dto.description || '',
       category: dto.category,
       price: dto.price,
       stock: dto.stock,

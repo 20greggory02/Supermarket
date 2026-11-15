@@ -1,83 +1,67 @@
+import { pool } from '../config/database';
 import { Product } from '../models/types';
 
 export class ProductRepository {
-  private products: Product[] = [
-    {
-      id: 1,
-      name: 'Galletas Spider-Man Halloween x4',
-      category: 'Combos',
-      price: 15000,
-      stock: 20,
-      img: 'img/galletas-spiderman.jpg'
-    },
-    {
-      id: 2,
-      name: 'Arroz Roa x 500g',
-      category: 'Abarrotes',
-      price: 2400,
-      stock: 150,
-      img: 'img/arroz-roa.jpg'
-    },
-    {
-      id: 3,
-      name: 'Aceite Premier 1L',
-      category: 'Abarrotes',
-      price: 9800,
-      stock: 85,
-      img: 'img/aceite-premier.jpg'
-    },
-    {
-      id: 4,
-      name: 'Leche Alquería x 1L',
-      category: 'Lácteos',
-      price: 4100,
-      stock: 300,
-      img: 'img/leche-alqueria.jpg'
-    },
-    {
-      id: 5,
-      name: 'Café Sello Rojo 500g',
-      category: 'Abarrotes',
-      price: 14500,
-      stock: 12,
-      img: 'img/cafe-sello-rojo.jpg'
-    },
-    {
-      id: 6,
-      name: 'Gaseosa Coca-Cola 1.5L',
-      category: 'Bebidas',
-      price: 5200,
-      stock: 90,
-      img: 'img/coca-cola.jpg'
+  public async findAll(category?: string, search?: string): Promise<Product[]> {
+    const conditions: string[] = [];
+    const values: any[] = [];
+
+    if (category && category.trim() !== '' && category !== 'Todos') {
+      values.push(category.trim());
+      conditions.push(`LOWER(categoria) = LOWER($${values.length})`);
     }
-  ];
 
-  public findAll(): Product[] {
-    return [...this.products];
-  }
-
-  public findById(id: number): Product | undefined {
-    return this.products.find((p) => p.id === id);
-  }
-
-  public create(productData: Omit<Product, 'id'>): Product {
-    const nextId =
-      this.products.length > 0 ? Math.max(...this.products.map((p) => p.id)) + 1 : 1;
-
-    const newProduct: Product = {
-      id: nextId,
-      ...productData
-    };
-
-    this.products.push(newProduct);
-    return newProduct;
-  }
-
-  public updateStock(id: number, quantityToSubtract: number): void {
-    const product = this.findById(id);
-    if (product) {
-      product.stock -= quantityToSubtract;
+    if (search && search.trim() !== '') {
+      values.push(`%${search.trim()}%`);
+      conditions.push(`nombre ILIKE $${values.length}`);
     }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+    const query = `
+      SELECT id, nombre AS name, descripcion AS description, categoria AS category,
+             precio::float AS price, stock, imagen AS img
+      FROM productos
+      ${whereClause}
+      ORDER BY id ASC
+    `;
+
+    const result = await pool.query(query, values);
+    return result.rows;
+  }
+
+  public async findById(id: number): Promise<Product | undefined> {
+    const query = `
+      SELECT id, nombre AS name, descripcion AS description, categoria AS category,
+             precio::float AS price, stock, imagen AS img
+      FROM productos
+      WHERE id = $1
+    `;
+    const result = await pool.query(query, [id]);
+    return result.rows[0];
+  }
+
+  public async create(productData: Omit<Product, 'id'>): Promise<Product> {
+    const query = `
+      INSERT INTO productos (nombre, descripcion, categoria, precio, stock, imagen)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, nombre AS name, descripcion AS description, categoria AS category,
+                precio::float AS price, stock, imagen AS img
+    `;
+    const values = [
+      productData.name,
+      productData.description || '',
+      productData.category,
+      productData.price,
+      productData.stock,
+      productData.img
+    ];
+    const result = await pool.query(query, values);
+    return result.rows[0];
+  }
+
+  public async updateStock(id: number, quantityToSubtract: number): Promise<void> {
+    const query = `UPDATE productos SET stock = stock - $1 WHERE id = $2`;
+    await pool.query(query, [quantityToSubtract, id]);
   }
 }
 

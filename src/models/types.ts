@@ -8,12 +8,12 @@ export class AppError extends Error {
   }
 }
 
-// ENTIDADES / MODELOS
 export type Category = 'Abarrotes' | 'Lácteos' | 'Bebidas' | 'Combos';
 
 export interface Product {
   id: number;
   name: string;
+  description?: string;
   category: Category;
   price: number;
   stock: number;
@@ -25,6 +25,8 @@ export interface User {
   name: string;
   email: string;
   password: string;
+  phone: string;
+  address: string;
   createdAt: Date;
 }
 
@@ -45,9 +47,10 @@ export interface Order {
   createdAt: Date;
 }
 
-// Data Transfer Objects
+// DTOs (Data Transfer Objects)
 export interface CreateProductDTO {
   name: string;
+  description?: string;
   category: Category;
   price: number;
   stock: number;
@@ -59,6 +62,8 @@ export interface RegisterUserDTO {
   email: string;
   password: string;
   confirmPassword: string;
+  phone: string;
+  address: string;
 }
 
 export interface LoginUserDTO {

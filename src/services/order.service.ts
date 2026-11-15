@@ -3,7 +3,7 @@ import { orderRepository } from '../repositories/order.repository';
 import { productRepository } from '../repositories/product.repository';
 
 export class OrderService {
-  public createOrder(dto: CreateOrderDTO): Order {
+  public async createOrder(dto: CreateOrderDTO): Promise<Order> {
     const { userId, items } = dto;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
@@ -13,13 +13,12 @@ export class OrderService {
     const orderItems: OrderItem[] = [];
     let totalOrder = 0;
 
-    // 1. Validar stock disponible de todos los productos antes de descontar
     for (const item of items) {
       if (!item.productId || typeof item.quantity !== 'number' || item.quantity <= 0) {
         throw new AppError('Cada ítem debe tener un productId válido y cantidad > 0', 400);
       }
 
-      const product = productRepository.findById(item.productId);
+      const product = await productRepository.findById(item.productId);
       if (!product) {
         throw new AppError(`Producto con ID ${item.productId} no existe`, 404);
       }
@@ -43,13 +42,11 @@ export class OrderService {
       });
     }
 
-    // 2. Descontar inventario en el repositorio
     for (const item of items) {
-      productRepository.updateStock(item.productId, item.quantity);
+      await productRepository.updateStock(item.productId, item.quantity);
     }
 
-    // 3. Guardar y devolver la orden confirmada
-    return orderRepository.create({
+    return await orderRepository.create({
       userId: userId || null,
       items: orderItems,
       total: totalOrder,
