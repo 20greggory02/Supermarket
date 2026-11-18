@@ -56,9 +56,10 @@ De forma alternativa se puede ejecutar en **PowerShell:**
     npm run dev:all
 
 si todo esta bien veras:
-Conectado exitosamente a PostgreSQL (Docker)
-Servidor corriendo en: http://localhost:3000
-API REST disponible en: http://localhost:3000/api/v1/products
+
+    Conectado exitosamente a PostgreSQL (Docker)
+    Servidor corriendo en: http://localhost:3000
+    API REST disponible en: http://localhost:3000/api/v1/products
 
 npm run dev:all ejecuta de manera automatica el servidor de PostgreSQL una vez ejecutado ese comando, no es necesario ejecutarlo de nuevo a menos que se reinicie/apague el dispositivo en el que se esta trabajando. Si desea ejecutarl el servidor nuevamente es suficiente con ejecutar:
 
