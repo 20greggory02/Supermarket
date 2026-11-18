@@ -47,11 +47,11 @@ De forma alternativa se puede ejecutar en **PowerShell:**
 
 ## Instalar Dependencias y arrancar el servidor
 
-# 1. Instalar dependencias de Node.js
+### 1. Instalar dependencias de Node.js
 
     npm install
 
-# 2. Iniciar el servidor en modo desarrollo
+### 2. Iniciar el servidor en modo desarrollo
 
     npm run dev:all
 
