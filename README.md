@@ -42,7 +42,7 @@ Antes de iniciar el proyecto, asegúrate de tener el motor de **Docker** activo 
 
 Para **Windows** es suficiente con abrir la aplicacion **Docker Desktop** y esperar a que el estado sea "Docker Desktop is running".
 De forma alternativa se puede ejecutar en **PowerShell:**
-    ```PowerShell
+
     Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 
 ## Instalar Dependencias y arrancar el servidor
