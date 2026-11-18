@@ -4,12 +4,14 @@
   "description": "Backend REST en Node.js y TypeScript para StockFlow",
   "type": "commonjs",
   "main": "dist/server.js",
-  "scripts": {
+"scripts": {
+    "db:up": "docker start stockflow-postgres 2>/dev/null || (docker build -t stockflow-db ./database && docker run -d --name stockflow-postgres -p 5432:5432 -v stockflow_pgdata:/var/lib/postgresql/data stockflow-db)",
+    "db:down": "docker stop stockflow-postgres",
     "dev": "nodemon --watch src --ext ts --exec ts-node --project tsconfig.json src/server.ts",
+    "dev:all": "npm run db:up && sleep 2 && npm run dev",
     "build": "tsc",
     "start": "node dist/server.js"
-  },
-  "dependencies": {
+  },  "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.22.3",
     "pg": "^8.23.1"

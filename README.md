@@ -32,32 +32,37 @@ Supermarket/
 │   └── server.ts                          # Punto de entrada del servidor Express
 ├── package.json                           # Dependencias y scripts de ejecución
 └── tsconfig.json                          # Configuración del compilador TypeScript
+```
 
-# 1. Construir la imagen personalizada con las tablas y datos iniciales
-docker build -t stockflow-db ./database
+## Requisitos previos en tu sistema operativo
+Antes de iniciar el proyecto, asegúrate de tener el motor de **Docker** activo en tu equipo:
+* **En Linux (Arch / Ubuntu / Debian):**
+  ```bash
+  sudo systemctl enable --now docker
 
-# 2. Iniciar el contenedor en segundo plano en el puerto 5432
-docker run -d \
-  --name stockflow-postgres \
-  -p 5432:5432 \
-  -v stockflow_pgdata:/var/lib/postgresql/data \
-  stockflow-db
+Para **Windows** es suficiente con abrir la aplicacion **Docker Desktop** y esperar a que el estado sea "Docker Desktop is running".
+De forma alternativa se puede ejecutar en **PowerShell:**
+    ```PowerShell
+    Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"
 
 ## Instalar Dependencias y arrancar el servidor
 
 # 1. Instalar dependencias de Node.js
-npm install
+
+    npm install
 
 # 2. Iniciar el servidor en modo desarrollo
-npm run dev
+
+    npm run dev:all
 
 si todo esta bien veras:
 Conectado exitosamente a PostgreSQL (Docker)
 Servidor corriendo en: http://localhost:3000
 API REST disponible en: http://localhost:3000/api/v1/products
 
----
+npm run dev:all ejecuta de manera automatica el servidor de PostgreSQL una vez ejecutado ese comando, no es necesario ejecutarlo de nuevo a menos que se reinicie/apague el dispositivo en el que se esta trabajando. Si desea ejecutarl el servidor nuevamente es suficiente con ejecutar:
 
-### Siguiente Paso
+    npm run dev
 
-¡Tu proyecto **StockFlow** está listo para subir a GitHub! Solo recuerda asegurarte de que tu archivo `.gitignore` incluya `node_modules/` y `dist/` para mantener el repositorio limpio. ¿Necesitas ayuda con algún comando de Git para subirlo o algún otro ajuste en el código?
+
+
