@@ -16,10 +16,18 @@
             <input type="text" id="searchInput" placeholder="Buscar por nombre...">
             <button onclick="filterProducts()">Buscar</button>
         </div>
-        <div class="links">
+
+        <div class="links" id="authLinks">
             <a href="register.html">Registrate</a>
             <a href="login.html" id="estilizado">Iniciar Sesion</a>
         </div>
+
+        <!-- Usuario: se muestra si HAY sesión iniciada -->
+        <div class="links user-box oculto" id="userBox">
+            <span class="user-name">👤 <span id="userName"></span></span>
+            <button type="button" id="logoutBtn">Cerrar sesión</button>
+        </div>
+
         <div class="cart-icon" onclick="scrollToCart()">
             🛒 Mi Pedido (<span id="cartCount">0</span>)
         </div>
@@ -253,5 +261,7 @@
         // Render Inicial
         renderProducts();
     </script>
+        </script>
+    <script src="js/session.js"></script>
 </body>
 </html>
