@@ -103,7 +103,70 @@ span{
 .links{
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
+    gap: 8px 16px;
+}
+
+.links a{
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.links a.link-olvido{ color: #3A86FF; }
+.links a.link-registro{ color: #EF233C; }
+
+.links a.link-olvido:hover{ color: #1C5FD1; text-decoration: underline; }
+.links a.link-registro:hover{ color: #B3132A; text-decoration: underline; }
+
+/* ===== Pantalla dividida / ventana angosta ===== */
+@media (max-width: 1000px){
+    body{
+        overflow-y: auto;
+        padding: 16px 0;
+    }
+
+    body::before{
+        position: fixed;
+    }
+
+    .contenido{
+        width: 92vw;
+        height: auto;
+        min-height: 75vh;
+        flex-direction: column;
+    }
+
+    .imagen{
+        display: none;
+    }
+
+    .formulario{
+        width: 100%;
+        padding: 24px 16px;
+    }
+
+    .vista{
+        width: 100%;
+        max-width: 340px;
+    }
+
+    form{
+        width: 100%;
+    }
+
+    input{
+        width: 100%;
+    }
+
+    .links{
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+   
 }
 
 a{
