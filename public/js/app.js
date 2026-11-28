@@ -109,6 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+});
+
     // ==========================================================
 // 4. TIENDA (index.html): catálogo, carrito y pedido
 //    Todo viene del backend: GET /products y POST /orders
@@ -496,5 +498,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateCart();
     loadProducts();
-});
 });
