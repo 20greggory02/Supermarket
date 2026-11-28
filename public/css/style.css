@@ -549,3 +549,43 @@
     font-size: 0.95rem;
 }
 .modal-total { margin-top: 0.8rem; font-weight: bold; font-size: 1.1rem; color: #8b0000; }
+/* ===== Header: barra roja y distribución (también en pantalla dividida) ===== */
+header {
+    background-color: #8b0000 !important;
+    color: white;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    padding: 1rem 2.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .search-bar {
+    flex: 1 1 260px;
+    width: auto;
+    max-width: 520px;
+}
+
+@media (max-width: 820px) {
+    header {
+        padding: 0.75rem 1rem;
+    }
+
+    header .search-bar {
+        order: 3;
+        flex: 1 1 100%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .main-container {
+        flex-direction: column;
+        padding: 1rem;
+    }
+}
