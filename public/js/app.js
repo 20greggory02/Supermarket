@@ -437,11 +437,20 @@ async function confirmOrder() {
         return;
     }
 
-    const usuario = getUsuario();
+        const usuario = getUsuario();
+    if (!usuario) {
+        showModal(
+            'Inicia sesión para pedir',
+            'Para confirmar un pedido necesitas una cuenta. Inicia sesión o regístrate y vuelve a armar tu pedido.',
+            { esError: true }
+        );
+        return;
+    }
+
     const body = {
+        userId: usuario.id,
         items: cart.map(item => ({ productId: item.id, quantity: item.qty }))
     };
-    if (usuario) body.userId = usuario.id;
 
     const orderBtn = document.querySelector('.btn-order');
     const textoOriginal = orderBtn.textContent;
